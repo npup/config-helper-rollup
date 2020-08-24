@@ -1,0 +1,13 @@
+{
+  "name": "examples-simple",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "author": "P.Envall <petter.envall@gmail.com>",
+  "license": "ISC",
+  "scripts": {
+    "build": "npm run clean && npx rollup -c ./rollup.config.js",
+    "clean": "rm -rf ./dist",
+    "dev": "npm run build -- -w --environment NODE_ENV:development"
+  }
+}

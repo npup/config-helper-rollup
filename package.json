@@ -1,10 +1,9 @@
 {
   "name": "config-helper-rollup",
-  "version": "0.0.11-alpha",
+  "version": "0.0.12-alpha",
   "description": "Quite a bit under construction. Beware - no guarantees, no semver (or even versioning) (yet)",
   "type": "module",
-  "main": "dist/esm/index.js",
-  "module": "dist/esm/index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

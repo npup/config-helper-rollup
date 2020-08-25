@@ -1,6 +1,6 @@
 {
   "name": "config-helper-rollup",
-  "version": "0.0.3-alpha",
+  "version": "0.0.4-alpha",
   "description": "Quite a bit under construction. Beware - no guarantees, no semver (or even versioning) (yet)",
   "type": "module",
   "main": "./dist/esm/index.js",

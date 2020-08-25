@@ -20,7 +20,7 @@ import {
     defaultOptions,
     defaultStylesOptions,
     defaultSvelteOptions
-} from "./defaults";
+} from "./defaults.js";
 
 
 export const chr = (options = {}) => {

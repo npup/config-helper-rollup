@@ -1,6 +1,6 @@
 {
   "name": "config-helper-rollup",
-  "version": "0.0.16-alpha",
+  "version": "0.0.17-alpha",
   "description": "Quite a bit under construction. Beware - no guarantees, no semver (or even versioning) (yet)",
   "type": "module",
   "main": "src/index.js",

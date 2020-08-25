@@ -20,7 +20,7 @@ import {
     defaultStylesOptions,
     defaultSvelteOptions
 } from "./defaults.js";
-import { resolvePath } from "./util";
+import { resolvePath } from "./util.js";
 
 
 export const chr = (options = {}) => {

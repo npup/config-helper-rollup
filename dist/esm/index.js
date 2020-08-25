@@ -20,7 +20,7 @@ import {
     defaultOptions,
     defaultStylesOptions,
     defaultSvelteOptions
-} from "./defaults";
+} from "../../src/defaults";
 
 const defaults = {
     defaultDevserverOptions,

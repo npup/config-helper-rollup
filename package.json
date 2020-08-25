@@ -1,6 +1,6 @@
 {
   "name": "config-helper-rollup",
-  "version": "0.0.7-alpha",
+  "version": "0.0.8-alpha",
   "description": "Quite a bit under construction. Beware - no guarantees, no semver (or even versioning) (yet)",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -10,8 +10,7 @@
   "keywords": [],
   "author": "P.Envall <petter.envall@gmail.com>",
   "license": "ISC",
-  "devDependencies": {
-    "rollup": "^2.26.4",
+  "dependencies": {
     "@rollup/plugin-commonjs": "^15.0.0",
     "@rollup/plugin-node-resolve": "^9.0.0",
     "rollup-plugin-generate-html-template": "^1.7.0",

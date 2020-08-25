@@ -1,5 +1,4 @@
-import { chr } from "../../src/index";
-
+import { chr } from "../../dist/esm/index";
 
 export default [
     chr("app",{

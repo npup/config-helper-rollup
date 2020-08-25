@@ -1,5 +1,8 @@
-import { chr } from "../../src/index";
+import { chr } from "../../dist/esm/index";
+
+const c = chr("app");
+console.log(c);
 
 export default [
-    chr("app")
+    c
 ];

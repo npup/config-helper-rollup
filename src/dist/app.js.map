@@ -1,0 +1,1 @@
+{"version":3,"file":"app.js","sources":["../../examples/1-simple/src/main.js"],"sourcesContent":["\nconsole.log(\"An app\");\n"],"names":["console","log"],"mappings":"yBACAA,QAAQC,IAAI"}

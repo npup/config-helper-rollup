@@ -1,4 +1,4 @@
-export const defaultOptions = {
+const defaultOptions = {
 
     src: "./src",
     dist: "./dist",
@@ -17,23 +17,32 @@ export const defaultOptions = {
 };
 
 
-export const defaultHtmlTemplateOptions = {
+const defaultHtmlTemplateOptions = {
     template: "index.html",
     page: "index",
 };
 
 
-export const defaultDevserverOptions = {
+const defaultDevserverOptions = {
     port: 3000,
     livereload: true,
 };
 
-export const defaultSvelteOptions = {
+const defaultSvelteOptions = {
     // cssFileBaseName: "<name>", // will default to "<name>" and in the end become => "<name>.svelte.css"
 };
 
-export const defaultStylesOptions = {
+const defaultStylesOptions = {
     autoModules: /.+\.module\..+/,
     extract: true,
     sourceMap: true,
+};
+
+
+module.exports = {
+    defaultOptions,
+    defaultHtmlTemplateOptions,
+    defaultDevserverOptions,
+    defaultSvelteOptions,
+    defaultStylesOptions,
 };

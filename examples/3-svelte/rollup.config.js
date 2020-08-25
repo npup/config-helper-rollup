@@ -2,8 +2,7 @@ import { chr } from "../../src/index";
 
 
 export default [
-    chr({
-        name: "app",
+    chr("app", {
         svelte: true,
         devServer: true,
         htmlTemplate: true,

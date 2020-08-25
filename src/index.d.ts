@@ -1,5 +1,4 @@
 interface ISRConfOptions {
-    name?: string;
     src?: string;
     dist?: string;
     entry?: string;
@@ -8,7 +7,6 @@ interface ISRConfOptions {
     sourcemap?: boolean;
 }
 interface ISRConfDefaultOptions extends ISRConfOptions {
-    name: "app";
     src: "./src";
     dist: "./dist";
     entry: "main.js";
@@ -17,4 +15,4 @@ interface ISRConfDefaultOptions extends ISRConfOptions {
     sourcemap: true;
 }
 
-export declare function chr(options: ISRConfDefaultOptions): void;
+export declare function chr(name: string, options: ISRConfDefaultOptions): void;

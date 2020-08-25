@@ -23,7 +23,7 @@ import {
 import { resolvePath } from "./util.js";
 
 
-export const chr = (options = {}) => {
+export const chr = (name, options = {}) => {
     options = { ...defaultOptions, ...options };
 
     let { production: productionEnvProperty } = options;
@@ -33,8 +33,7 @@ export const chr = (options = {}) => {
     }
 
     let {
-        // basics
-        name,           // mandatory and must be unique
+        // basic options
         src, dist,      // input/output directories
         entry,          // entry point (file name) for javascript
 

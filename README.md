@@ -50,7 +50,7 @@ And some more, of course if one wants a dev server and some hot reloading etc.
 
 ## Rollup Helper helps
 
-`rh` is a function than builds a configuration object for you. It can help you with all the things in the manual configuration above, and some more. Here is the menu:
+`chr` is a function than builds a configuration object for you. Its options can help you with all the things in the manual configuration above, and some more. Here is the menu:
 
 * selecting input files and names of output files
 * source maps
@@ -61,13 +61,15 @@ And some more, of course if one wants a dev server and some hot reloading etc.
 
 ## Example
 
+Give the `name` property of a normal rollup config options object, and submit any extra options if wanted.
+
 Config
 
     // rollup.config.js    
-    import { rch } from "rollup-config-helper";
+    import { chr } from "config-helper-rollup";
     
     export default [ // array of 1 or more configurations
-        rch({ name: "app" }) // voilà!
+        chr("app") // voilà!
     ];
 
 Npm scripts
@@ -99,7 +101,6 @@ This uses the defaults, which creates a configuration that handles
 Those things can all be changed. Here are all available options, and any defaults:
 
     {
-        name:       -no default-    // the rollup bundle output name property
         
         src:        "./src",        // src directory
         dist:       "./dist",       // dist directory
@@ -122,12 +123,11 @@ Call it multiple times if you want, of course:
 
     // rollup.config.js
     
-    import { rch } from "rollup-config-helper";
+    import { chr } from "config-helper-rollup";
     
     export default = [
-        rch(),
-        rch({
-            name: "app2",
+        chr("app"),
+        chr("app2", {
             htmlTemplate: true,
             entry: "second.js",
         }),

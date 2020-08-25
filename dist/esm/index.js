@@ -1,1 +1,1 @@
-export * from "../../src/config-helper-rollup.js";
+export * from "../../src/config-helper-rollup";

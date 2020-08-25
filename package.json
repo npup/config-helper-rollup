@@ -2,10 +2,7 @@
   "name": "config-helper-rollup",
   "version": "0.0.1",
   "description": "Quite a bit under construction. Beware - no guarantees, no semver (or even versioning) (yet)",
-  "main": "index.js",
-  "directories": {
-    "example": "example"
-  },
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

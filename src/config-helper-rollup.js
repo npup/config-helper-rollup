@@ -1,4 +1,3 @@
-import path from "path";
 
 import sveltePlugin from "rollup-plugin-svelte";
 import autoPreprocess from "svelte-preprocess";
@@ -21,6 +20,7 @@ import {
     defaultStylesOptions,
     defaultSvelteOptions
 } from "./defaults.js";
+import { resolvePath } from "./util";
 
 
 export const chr = (options = {}) => {

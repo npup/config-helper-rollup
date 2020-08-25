@@ -123,15 +123,15 @@ export const chr = (options = {}) => {
     console.table(info);
 
     // js bundle
-    const jsIn = path.resolve(__dirname, `${ src }/${ entry }`);
-    const jsOut = path.resolve(__dirname, `${ dist }/${ name }.js`);
+    const jsIn = resolvePath(`${ src }/${ entry }`);
+    const jsOut = resolvePath(`${ dist }/${ name }.js`);
 
     // html template
 
     if (options.htmlTemplate) {
 
-        const htmlIn = path.resolve(__dirname, `${ src }/${ options.htmlTemplate.template }`);
-        const htmlOut = path.resolve(__dirname, `${ dist }/${ options.htmlTemplate.page }.html`);
+        const htmlIn = resolvePath(`${ src }/${ options.htmlTemplate.template }`);
+        const htmlOut = resolvePath(`${ dist }/${ options.htmlTemplate.page }.html`);
         options.htmlTemplate = {
             template: htmlIn,
             target: htmlOut,
@@ -141,7 +141,7 @@ export const chr = (options = {}) => {
     // devserver
     let serveDir;
     if (options.devServer) {
-        serveDir = path.resolve(__dirname, dist);
+        serveDir = resolvePath(dist);
     }
 
     /**

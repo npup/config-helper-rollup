@@ -14,6 +14,9 @@ const { terser } = require("rollup-plugin-terser");
 
 const stylesPlugin = require("rollup-plugin-styles");
 
+const resolvePath = (_path, base = "./") => {
+   return path.resolve(base, _path);
+};
 
 const {
     defaultDevserverOptions,
@@ -45,13 +48,13 @@ const chr = (name, options = {}) => {
         svelte,         // handle svelte compilation? boolean or settings
         styles,         // handle styles compilation? boolean or settings
 
-        minimize: globalMinimize, // crunch file output? boolean or...
+        minify: globalMinify, // crunch file output? boolean or...
 
     } = options;
 
-    //  minimize: use explicit setting or heed isProduction flag
-    if ("boolean" != typeof globalMinimize) {
-        globalMinimize = isProduction;
+    //  minify: use explicit setting or heed isProduction flag
+    if ("boolean" != typeof globalMinify) {
+        globalMinify = isProduction;
     }
 
     const info = {
@@ -59,7 +62,7 @@ const chr = (name, options = {}) => {
         "Production mode": isProduction,
         "Dist": dist,
         "Generate source maps:": sourcemap,
-        "Minimize (main prop)": globalMinimize,
+        "Minify (main prop)": globalMinify,
     };
 
 
@@ -77,15 +80,15 @@ const chr = (name, options = {}) => {
             [ "inject" ];
         delete styles.extract;
 
-        // minimize as told to, OR do as top prop says
-        let { minimize } = styles;
-        if ("boolean" != typeof styles.minimize) {
-            minimize = globalMinimize;
+        // minify as told to, OR do as top prop says
+        let { minify } = styles;
+        if ("boolean" != typeof styles.minify) {
+            minify = globalMinify;
         }
         styles = options.styles = {
             ...styles,
             mode,
-            minimize,
+            minimize: minify,
         };
     }
 
@@ -120,17 +123,17 @@ const chr = (name, options = {}) => {
         };
         options.svelte = svelte;
     }
-    console.table(info);
+    // console.table(info);
 
     // js bundle
-    const jsIn = path.resolve("./", `${ src }/${ entry }`);
-    const jsOut = path.resolve("./", `${ dist }/${ name }.js`);
+    const jsIn = resolvePath(`${ src }/${ entry }`);
+    const jsOut = resolvePath(`${ dist }/${ name }.js`);
     // html template
 
     if (options.htmlTemplate) {
 
-        const htmlIn = path.resolve("./", `${ src }/${ options.htmlTemplate.template }`);
-        const htmlOut = path.resolve("./", `${ dist }/${ options.htmlTemplate.page }.html`);
+        const htmlIn = resolvePath(`${ src }/${ options.htmlTemplate.template }`);
+        const htmlOut = resolvePath(`${ dist }/${ options.htmlTemplate.page }.html`);
         options.htmlTemplate = {
             template: htmlIn,
             target: htmlOut,
@@ -140,7 +143,7 @@ const chr = (name, options = {}) => {
     // devserver
     let serveDir;
     if (options.devServer) {
-        serveDir = path.resolve("./", dist);
+        serveDir = resolvePath(dist);
     }
 
     /**
@@ -186,7 +189,7 @@ const chr = (name, options = {}) => {
         }
     }
 
-    if (globalMinimize) {
+    if (globalMinify) {
         plugins.push(terser());
     }
 
@@ -194,9 +197,9 @@ const chr = (name, options = {}) => {
         input: jsIn,
         output: {
             name,
-            format: "iife",
             file: jsOut,
             sourcemap,
+            format: "iife",
             assetFileNames: "[name][extname]",
         },
         watch: {

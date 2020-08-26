@@ -11,7 +11,7 @@ const defaultOptions = {
     svelte: false,
     styles: false,
 
-    // minimize: will default to whatever `isProduction` is determined to be (see "production" option)
+    // minify: will default to whatever `isProduction` is determined to be (see "production" option)
 
     production: "NODE_ENV", // a hard boolean - OR  which node process.env property to look at. Any value but "development" will mean `isProduction = true`
 };
@@ -36,6 +36,7 @@ const defaultStylesOptions = {
     autoModules: /.+\.module\..+/,
     extract: true,
     sourceMap: true,
+    // minify: (will default to main prop "minify")
 };
 
 

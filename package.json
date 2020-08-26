@@ -1,16 +1,21 @@
 {
   "name": "config-helper-rollup",
-  "version": "0.0.22-alpha",
-  "description": "Quite a bit under construction. Beware - no guarantees, no semver (or even versioning) (yet)",
+  "version": "0.0.23-alpha",
+  "description": "Quite a bit under construction. Beware - no guarantees, no semver (or even proper versioning) (yet)",
   "main": "/",
   "exports": {
     "require": "./dist/cjs/index.js",
     "import": "./dist/esm/index.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node test/index.js | tap-spec"
   },
-  "keywords": [],
+  "keywords": [
+    "rollup",
+    "config",
+    "helper",
+    "svelte"
+  ],
   "author": "P.Envall <petter.envall@gmail.com>",
   "license": "ISC",
   "dependencies": {
@@ -23,5 +28,9 @@
     "rollup-plugin-svelte": "^5.2.3",
     "rollup-plugin-terser": "^7.0.0",
     "svelte-preprocess": "^4.1.1"
+  },
+  "devDependencies": {
+    "tap-spec": "^5.0.0",
+    "tape": "^5.0.1"
   }
 }

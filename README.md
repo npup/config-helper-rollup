@@ -114,7 +114,7 @@ Those things can all be changed. Here are all available options, and any default
 
         production: "NODE_ENV",     // a hard boolean flag - OR a string that says which node.env property to look at (if that property is not exactly equal to "development", mode is considered to be "production")
         
-        minimize:   null,           // if not an explicit boolean, it will be the same as the "is production" flag (see options#production)
+        minify:   null,           // if not an explicit boolean, it will be the same as the "is production" flag (see options#production)
     }
 
 

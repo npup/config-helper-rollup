@@ -1,6 +1,6 @@
 {
   "name": "config-helper-rollup",
-  "version": "0.0.26-alpha",
+  "version": "0.0.27-alpha",
   "description": "Quite a bit under construction. Beware - no guarantees, no semver (or even proper versioning) (yet)",
   "main": "/",
   "exports": {

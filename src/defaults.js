@@ -19,7 +19,7 @@ const defaultOptions = {
 
 const defaultHtmlTemplateOptions = {
     template: "index.html",
-    page: "index",
+    page: "index.html",
 };
 
 

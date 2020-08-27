@@ -45,7 +45,7 @@ test("default conf", t => {
     test("default conf: plugins", t => {
         t.plan(1);
         const pluginNames = conf.plugins.map(({ name }) => name);
-        t.deepEqual(pluginNames, [ "node-resolve", "commonjs", "terser" ]);
+        t.deepEqual(pluginNames, [ "node-resolve", "replace", "commonjs", "terser" ]);
     });
 
     t.end();
@@ -78,17 +78,28 @@ test("custom options: force minimize ON", t => {
         minimize: true,
     });
     const pluginNames = conf.plugins.map(({ name }) => name);
-    t.deepEqual(pluginNames, [ "node-resolve", "commonjs", "terser", ], "devmode should activate minification as default");
+    t.deepEqual(pluginNames, [ "node-resolve", "replace", "commonjs", "terser", ], "devmode should activate minification as default");
     t.end();
 });
 
-test("custom options: production forced false => minification default ON", t => {
+test("custom options: production forced false => minification default OFF", t => {
     t.plan(1);
     const conf = chr("app", {
         production: false,
     });
     const pluginNames = conf.plugins.map(({ name }) => name);
-    t.deepEqual(pluginNames, [ "node-resolve", "commonjs", ], "devmode should activate minification as default");
+    t.notOk(pluginNames.includes("terser"), "should turn on minification");
+    t.end();
+});
+
+test("custom options: production forced false, minification true  => minification ON", t => {
+    t.plan(1);
+    const conf = chr("app", {
+        production: false,
+        minify: true,
+    });
+    const pluginNames = conf.plugins.map(({ name }) => name);
+    t.ok(pluginNames.includes("terser"), "should turn on minification");
     t.end();
 });
 
@@ -98,12 +109,12 @@ test("custom options: with production `true` forced minification `false` => mini
         minify: false,
     });
     const pluginNames = conf.plugins.map(({ name }) => name);
-    t.deepEqual(pluginNames, [ "node-resolve", "commonjs", ], "production mode and minify `false` should de-activate minification");
+    t.notOk(pluginNames.includes("terser"), "should not include terser");
     t.end();
 });
 
 test("custom options: toggle plugins", t => {
-    t.plan(1);
+    t.plan(3);
     const conf = chr("app", {
         production: false,
         styles: true,
@@ -111,7 +122,9 @@ test("custom options: toggle plugins", t => {
         svelte: true,
     });
     const pluginNames = conf.plugins.map(({ name }) => name);
-    t.deepEqual(pluginNames, [ "node-resolve", "commonjs", "styles", "svelte", "html-template", ], "activating plugins should work");
+    t.ok(pluginNames.includes("styles"), "should include \"styles\"");
+    t.ok(pluginNames.includes("html-template"), "should include \"html-template\"");
+    t.ok(pluginNames.includes("svelte"), "should include \"svelte\"");
     t.end();
 });
 

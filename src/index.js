@@ -34,6 +34,7 @@ const chr = (name, options = {}) => {
 
     let { production: productionEnvProperty } = options;
     let isProduction = !!productionEnvProperty;
+
     if ("string" == typeof productionEnvProperty) {
         isProduction = "development" != process.env[productionEnvProperty];
     }
@@ -99,8 +100,9 @@ const chr = (name, options = {}) => {
         if ("boolean" == typeof htmlTemplate) {
             htmlTemplate = {};
         }
-        htmlTemplate = options.htmlTemplate = { ...defaultHtmlTemplateOptions, ...htmlTemplate, };
+        htmlTemplate = options.htmlTemplate = { ...defaultHtmlTemplateOptions, ...htmlTemplate };
     }
+
     if (devServer) {
         if ("boolean" == typeof devServer) {
             devServer = {};
@@ -112,7 +114,7 @@ const chr = (name, options = {}) => {
 
     if (svelte) {
         if ("boolean" == typeof svelte) {
-            svelte = { ...defaultSvelteOptions, };
+            svelte = {} ;
         }
         let { cssFileBaseName = name } = svelte;
         svelte = {
@@ -129,9 +131,10 @@ const chr = (name, options = {}) => {
 
     if (jsx) {
         if ("boolean" == typeof jsx) {
-            jsx = { ...defaultJsxOptions };
+            jsx = {};
         }
         jsx = options.jsx = {
+            ...defaultJsxOptions,
             ...jsx,
             transforms: [ "jsx", ],
         };
@@ -144,9 +147,8 @@ const chr = (name, options = {}) => {
     // html template
 
     if (options.htmlTemplate) {
-
         const htmlIn = resolvePath(`${ src }/${ options.htmlTemplate.template }`);
-        const htmlOut = resolvePath(`${ dist }/${ options.htmlTemplate.page }.html`);
+        const htmlOut = resolvePath(`${ dist }/${ options.htmlTemplate.page }`);
         options.htmlTemplate = {
             template: htmlIn,
             target: htmlOut,

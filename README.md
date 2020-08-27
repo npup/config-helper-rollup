@@ -116,6 +116,35 @@ Those things can all be changed. Here are all available options, and any default
         
         minify:   null,           // if not an explicit boolean, it will be the same as the "is production" flag (see options#production)
     }
+    
+    
+## Options
+
+### src
+The src directory. Defaults to `./src`.
+
+### dist  
+The output directory. Defaults to `./dist`. 
+
+### entry
+The main entry js file. Defaults to `main.js`.
+
+### sourcemap
+If sourcemaps should be generated (js, css). Defauls to `true`.
+
+### htmlTemplate
+If an html template should be processed. Defaults to `false`.
+
+Possible values: `true`, `false`, `<HtmlTemplateOptions>`.
+
+##### HtmlTemplateOptions:
+   
+`template` - src template. Defaults to `index.html`.  
+`page` - output file name (in output directory). Defaults to `index.html`.
+    
+
+ 
+
 
 
 Call it multiple times if you want, of course:

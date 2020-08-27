@@ -3,6 +3,8 @@ interface ISRConfOptions {
     dist?: string;
     entry?: string;
     htmlTemplate?: boolean | any;
+    svelte?: boolean | any;
+    jsx?: boolean | any;
     devServer?: boolean | any;
     sourcemap?: boolean;
 }
@@ -11,6 +13,8 @@ interface ISRConfDefaultOptions extends ISRConfOptions {
     dist: "./dist";
     entry: "main.js";
     htmlTemplate: false;
+    svelte: false,
+    jsx: false,
     devServer: false,
     sourcemap: true;
 }

@@ -1,12 +1,7 @@
-import "./apa.css";
-console.log("apa!");
+import "./main.css";
+import App from "./app/App.svelte";
 
-
-import App from "./App.svelte";
-
-
+const appRoot = document.querySelector(".app");
 export default new App({
-    target: document.querySelector("body"),
+    target: appRoot,
 });
-
-

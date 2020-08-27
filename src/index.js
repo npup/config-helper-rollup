@@ -1,18 +1,19 @@
 const path = require("path");
 
 const sveltePlugin = require("rollup-plugin-svelte");
-const autoPreprocess = require("svelte-preprocess");
-
-const { nodeResolve } = require('@rollup/plugin-node-resolve');
-const commonjs = require("@rollup/plugin-commonjs");
-
-const serve = require("rollup-plugin-serve");
-
+const sucrasePlugin = require("@rollup/plugin-sucrase");
+const { nodeResolve: nodeResolvePlugin } = require('@rollup/plugin-node-resolve');
+const commonjsPlugin = require("@rollup/plugin-commonjs");
+const servePlugin = require("rollup-plugin-serve");
 const htmlTemplatePlugin = require("rollup-plugin-generate-html-template");
 const liveReloadPlugin = require("rollup-plugin-livereload");
-const { terser } = require("rollup-plugin-terser");
-
+const { terser: terserPlugin } = require("rollup-plugin-terser");
 const stylesPlugin = require("rollup-plugin-styles");
+const replacePlugin = require("@rollup/plugin-replace");
+
+const autoPreprocess = require("svelte-preprocess");
+
+const env = process.env.NODE_ENV;
 
 const resolvePath = (_path, base = "./") => {
    return path.resolve(base, _path);
@@ -23,7 +24,8 @@ const {
     defaultHtmlTemplateOptions,
     defaultOptions,
     defaultStylesOptions,
-    defaultSvelteOptions
+    defaultSvelteOptions,
+    defaultJsxOptions,
 } = require("./defaults");
 
 
@@ -46,6 +48,7 @@ const chr = (name, options = {}) => {
         htmlTemplate,   // use html template? boolean or settings
         devServer,      // start a development server? boolean or settings
         svelte,         // handle svelte compilation? boolean or settings
+        jsx,            // handle jsx compilation? boolean or settings
         styles,         // handle styles compilation? boolean or settings
 
         minify: globalMinify, // crunch file output? boolean or...
@@ -123,6 +126,16 @@ const chr = (name, options = {}) => {
         };
         options.svelte = svelte;
     }
+
+    if (jsx) {
+        if ("boolean" == typeof jsx) {
+            jsx = { ...defaultJsxOptions };
+        }
+        jsx = options.jsx = {
+            ...jsx,
+            transforms: [ "jsx", ],
+        };
+    }
     // console.table(info);
 
     // js bundle
@@ -154,19 +167,25 @@ const chr = (name, options = {}) => {
         resolveDedupe.push("svelte");
     }
     const plugins = [
-        nodeResolve({
+        nodeResolvePlugin({
             browser: true,
             dedupe: resolveDedupe
         }),
-        commonjs(),
+        replacePlugin({
+            "process.env.NODE_ENV": JSON.stringify(env),
+            [productionEnvProperty]: JSON.stringify(process.env[productionEnvProperty]),
+        }),
+        commonjsPlugin(),
     ];
 
     if (options.styles) {
         plugins.push(stylesPlugin(options.styles));
     }
-
     if (options.svelte) {
         plugins.push(sveltePlugin(options.svelte));
+    }
+    if (options.jsx) {
+        plugins.push(sucrasePlugin(jsx));
     }
     if (options.htmlTemplate) {
         plugins.push(htmlTemplatePlugin(options.htmlTemplate));
@@ -180,7 +199,7 @@ const chr = (name, options = {}) => {
 
             plugins.push(
                 // serve according to settings
-                serve({
+                servePlugin({
                     port: devServer.port,
                     contentBase: serveDir,
                     historyApiFallback: true,
@@ -190,7 +209,7 @@ const chr = (name, options = {}) => {
     }
 
     if (globalMinify) {
-        plugins.push(terser());
+        plugins.push(terserPlugin());
     }
 
     const result = {
@@ -207,6 +226,11 @@ const chr = (name, options = {}) => {
         },
         plugins,
     };
+
+    if (options.jsx) {
+        // needed for react for some reason :/
+        result.context = "window";
+    }
 
     return result;
 

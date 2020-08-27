@@ -32,6 +32,11 @@ const defaultSvelteOptions = {
     // cssFileBaseName: "<name>", // will default to "<name>" and in the end become => "<name>.svelte.css"
 };
 
+const defaultJsxOptions = {
+
+};
+
+
 const defaultStylesOptions = {
     autoModules: /.+\.module\..+/,
     extract: true,
@@ -45,5 +50,6 @@ module.exports = {
     defaultHtmlTemplateOptions,
     defaultDevserverOptions,
     defaultSvelteOptions,
+    defaultJsxOptions,
     defaultStylesOptions,
 };

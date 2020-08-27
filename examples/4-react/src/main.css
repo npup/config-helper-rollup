@@ -1,0 +1,17 @@
+
+html, html * {
+    box-sizing: border-box;
+}
+body {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 1em;
+}
+.app {
+    border: 1px solid #ccc;
+    padding: 1em;
+}
+
+h1 {
+    color: tomato;
+}

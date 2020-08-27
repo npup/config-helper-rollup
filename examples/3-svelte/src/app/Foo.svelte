@@ -1,14 +1,20 @@
 <script>
-    export let bar;
-
+    export let count;
     const foo = () => {
-        console.log("foo!", bar);
+        console.log("count:", count);
     };
-
 </script>
 
-<fieldset>
-    <legend>Foo ({ bar })</legend>
-    <button on:click={ foo }></button>
-</fieldset>
+<div class="inner">
+    Count is: <span class="count">{ count }</span>.
+</div>
 
+
+<style>
+    .inner {
+        font-family: Consolas, sans-serif;
+    }
+    .count {
+        font-weight: bold;
+    }
+</style>

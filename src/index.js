@@ -2,7 +2,7 @@ const path = require("path");
 
 const sveltePlugin = require("rollup-plugin-svelte");
 const sucrasePlugin = require("@rollup/plugin-sucrase");
-const { nodeResolve: nodeResolvePlugin } = require('@rollup/plugin-node-resolve');
+const { nodeResolve: nodeResolvePlugin } = require("@rollup/plugin-node-resolve");
 const commonjsPlugin = require("@rollup/plugin-commonjs");
 const servePlugin = require("rollup-plugin-serve");
 const htmlTemplatePlugin = require("rollup-plugin-generate-html-template");
@@ -16,7 +16,7 @@ const autoPreprocess = require("svelte-preprocess");
 const env = process.env.NODE_ENV;
 
 const resolvePath = (_path, base = "./") => {
-   return path.resolve(base, _path);
+    return path.resolve(base, _path);
 };
 
 const {
@@ -26,6 +26,7 @@ const {
     defaultStylesOptions,
     defaultSvelteOptions,
     defaultJsxOptions,
+    defaultTsOptions,
 } = require("./defaults");
 
 
@@ -51,6 +52,7 @@ const chr = (name, options = {}) => {
         svelte,         // handle svelte compilation? boolean or settings
         jsx,            // handle jsx compilation? boolean or settings
         styles,         // handle styles compilation? boolean or settings
+        ts,             // handle ts compilation? boolean or settings
 
         minify: globalMinify, // crunch file output? boolean or...
 
@@ -114,7 +116,7 @@ const chr = (name, options = {}) => {
 
     if (svelte) {
         if ("boolean" == typeof svelte) {
-            svelte = {} ;
+            svelte = {};
         }
         let { cssFileBaseName = name } = svelte;
         svelte = {
@@ -129,6 +131,7 @@ const chr = (name, options = {}) => {
         options.svelte = svelte;
     }
 
+
     if (jsx) {
         if ("boolean" == typeof jsx) {
             jsx = {};
@@ -137,6 +140,17 @@ const chr = (name, options = {}) => {
             ...defaultJsxOptions,
             ...jsx,
             transforms: [ "jsx", ],
+        };
+    }
+
+    if (ts) {
+        if ("boolean" == typeof ts) {
+            ts = {};
+        }
+        ts = options.ts = {
+            ...defaultTsOptions,
+            ...ts,
+            transforms: [ "typescript" ],
         };
     }
     // console.table(info);
@@ -189,6 +203,9 @@ const chr = (name, options = {}) => {
     if (options.jsx) {
         plugins.push(sucrasePlugin(jsx));
     }
+    if (options.ts) {
+        plugins.push(sucrasePlugin(ts));
+    }
     if (options.htmlTemplate) {
         plugins.push(htmlTemplatePlugin(options.htmlTemplate));
     }
@@ -234,6 +251,14 @@ const chr = (name, options = {}) => {
         result.context = "window";
     }
 
+    result.__proto__ = {
+        get meta() {
+            return {
+                author: "P. Envall!",
+                date: new Date,
+            };
+        }
+    }
     return result;
 
 };

@@ -10,6 +10,7 @@ const defaultOptions = {
     devServer: false,
     svelte: false,
     styles: false,
+    ts: false,
 
     // minify: will default to whatever `isProduction` is determined to be (see "production" option)
 
@@ -17,6 +18,9 @@ const defaultOptions = {
 };
 
 
+const defaultTsOptions = {
+
+};
 const defaultHtmlTemplateOptions = {
     template: "index.html",
     page: "index.html",
@@ -52,4 +56,5 @@ module.exports = {
     defaultSvelteOptions,
     defaultJsxOptions,
     defaultStylesOptions,
+    defaultTsOptions,
 };

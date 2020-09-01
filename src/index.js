@@ -42,7 +42,7 @@ function Conf(name, options = {}) {
     const baseOptions = { src, dist, entry, sourcemap, globalMinify, production };
 
     // creator of chaining utility option functions
-    const createChainedSetter = (prop, _defaults) => {
+    const addHandler = (prop, _defaults) => {
         return this[prop] = (options = true, defaults = _defaults) => {
             settings[prop] = mergeDefaults(options, defaults);
             return this;
@@ -53,12 +53,12 @@ function Conf(name, options = {}) {
     const settings = { name, ...baseOptions, };
 
     // create chaining utility functions for each wanted type of settings
-    const handleDevServer = createChainedSetter("devServer", defaultDevserverOptions);
-    const handleHtmlTemplate = createChainedSetter("htmlTemplate", defaultHtmlTemplateOptions);
-    const handleStyles = createChainedSetter("styles", defaultStylesOptions);
-    const handleSvelte = createChainedSetter("svelte", defaultSvelteOptions);
-    const handleJsx = createChainedSetter("jsx", defaultJsxOptions);
-    const handleTs = createChainedSetter("ts", defaultTsOptions);
+    const handleDevServer = addHandler("devServer", defaultDevserverOptions);
+    const handleHtmlTemplate = addHandler("htmlTemplate", defaultHtmlTemplateOptions);
+    const handleStyles = addHandler("styles", defaultStylesOptions);
+    const handleSvelte = addHandler("svelte", defaultSvelteOptions);
+    const handleJsx = addHandler("jsx", defaultJsxOptions);
+    const handleTs = addHandler("ts", defaultTsOptions);
 
     // invoke options handler functions directly for any settings submitted upfront
     [
@@ -72,15 +72,6 @@ function Conf(name, options = {}) {
         if (0) { console.log(`Using module: ${ name }: ${ !!type }`, { name, type: String(type), handler, options }); }
         if (type) { handler(type, options); }
     });
-
-
-    if (devServer) { handleDevServer(devServer, defaultDevserverOptions); }
-    if (htmlTemplate) { handleHtmlTemplate(htmlTemplate, defaultHtmlTemplateOptions); }
-    if (styles) { handleStyles(styles, defaultStylesOptions); }
-    if (svelte) { handleSvelte(svelte, defaultSvelteOptions); }
-    if (jsx) { handleJsx(jsx, defaultJsxOptions); }
-    if (ts) { handleTs(ts, defaultTsOptions); }
-
 
     // is runtime "production" or not?
     let { production: productionEnvProperty } = settings;

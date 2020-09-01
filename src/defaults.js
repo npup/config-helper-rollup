@@ -3,8 +3,9 @@ const defaultOptions = {
     src: "./src",
     dist: "./dist",
     entry: "main.js",
-
     sourcemap: true,
+    // minify: will default to whatever `isProduction` is determined to be (see "production" option)
+    production: "NODE_ENV", // a hard boolean - OR  which node process.env property to look at. Any value but "development" will mean `isProduction = true`
 
     htmlTemplate: false,
     devServer: false,
@@ -12,9 +13,7 @@ const defaultOptions = {
     styles: false,
     ts: false,
 
-    // minify: will default to whatever `isProduction` is determined to be (see "production" option)
 
-    production: "NODE_ENV", // a hard boolean - OR  which node process.env property to look at. Any value but "development" will mean `isProduction = true`
 };
 
 

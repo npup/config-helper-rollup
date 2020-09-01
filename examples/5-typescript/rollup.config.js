@@ -1,10 +1,13 @@
 import { chr } from "../../dist/esm/index";
+const c1 =  chr("tsApp", {
+    entry: "main.ts",
+
+    ts: true,
+    minify: false,
+});
+
+console.log(c1.peek());
 
 export default [
-    chr("tsApp", {
-        entry: "main.ts",
-
-        ts: true,
-        minify: false,
-    })
+    c1.get(),
 ];

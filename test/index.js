@@ -12,7 +12,7 @@ test("basic test of existence", t => {
 
 
 test("default conf", t => {
-    const conf = chr("app");
+    const conf = chr("app").end();
 
     test("default conf: general shape", t => {
         t.plan(1);
@@ -57,7 +57,7 @@ test("custom options: input", t => {
     const conf = chr("app", {
         src: "src2",
         entry: "special-entry.js",
-    });
+    }).end();
     t.equal(conf.input, `${ CWD }/src2/special-entry.js`, "input file name should be build according to given props");
 });
 
@@ -66,7 +66,7 @@ test("custom options: output", t => {
     const conf = chr("app2", {
         sourcemap: false,
         dist: "dist2",
-    });
+    }).end();
     t.equal(conf.output.name, "app2", "app \"name\" should match parameter name");
     t.equal(conf.output.file, `${ CWD }/dist2/app2.js`, "output filename should be built according to given props");
     t.equal(conf.output.sourcemap, false, "sourcemaps can be disabled");
@@ -76,7 +76,7 @@ test("custom options: force minimize ON", t => {
     t.plan(1);
     const conf = chr("app", {
         minimize: true,
-    });
+    }).end();
     const pluginNames = conf.plugins.map(({ name }) => name);
     t.deepEqual(pluginNames, [ "node-resolve", "replace", "commonjs", "terser", ], "devmode should activate minification as default");
     t.end();
@@ -86,7 +86,7 @@ test("custom options: production forced false => minification default OFF", t =>
     t.plan(1);
     const conf = chr("app", {
         production: false,
-    });
+    }).end();
     const pluginNames = conf.plugins.map(({ name }) => name);
     t.notOk(pluginNames.includes("terser"), "should turn on minification");
     t.end();
@@ -97,7 +97,7 @@ test("custom options: production forced false, minification true  => minificatio
     const conf = chr("app", {
         production: false,
         minify: true,
-    });
+    }).end();
     const pluginNames = conf.plugins.map(({ name }) => name);
     t.ok(pluginNames.includes("terser"), "should turn on minification");
     t.end();
@@ -107,7 +107,7 @@ test("custom options: with production `true` forced minification `false` => mini
     t.plan(1);
     const conf = chr("app", {
         minify: false,
-    });
+    }).end();
     const pluginNames = conf.plugins.map(({ name }) => name);
     t.notOk(pluginNames.includes("terser"), "should not include terser");
     t.end();
@@ -120,7 +120,7 @@ test("custom options: toggle plugins", t => {
         styles: true,
         htmlTemplate: true,
         svelte: true,
-    });
+    }).end();
     const pluginNames = conf.plugins.map(({ name }) => name);
     t.ok(pluginNames.includes("styles"), "should include \"styles\"");
     t.ok(pluginNames.includes("html-template"), "should include \"html-template\"");

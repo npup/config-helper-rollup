@@ -97,143 +97,150 @@ function Conf(name, options = {}) {
         settings.globalMinify = isProduction;
     }
 
+    settings.productionEnvProperty = productionEnvProperty;
+    settings.isProduction = isProduction;
 
-    this.getSettings = () => {
-        return settings;
-    };
-
-    this.get = () => {
-
-        // js bundle
-        const jsIn = resolvePath(`${ settings.src }/${ settings.entry }`);
-        const jsOut = resolvePath(`${ settings.dist }/${ settings.name }.js`);
-
-        // devserver
-        let serveDir;
-        if (settings.devServer) {
-            serveDir = resolvePath(settings.dist);
-        }
-
-        /** plugins */
-
-        // what to dedupe?
-        const resolveDedupe = [];
-        if (settings.svelte) {
-            resolveDedupe.push("svelte");
-        }
-
-        // base plugins
-        const plugins = [
-            nodeResolvePlugin({
-                browser: true,
-                dedupe: resolveDedupe
-            }),
-            replacePlugin({
-                "process.env.NODE_ENV": JSON.stringify(env),
-                [`process.env.${ productionEnvProperty }`]: JSON.stringify(process.env[productionEnvProperty]),
-            }),
-            commonjsPlugin(),
-        ];
-
-        // html template
-        if (settings.htmlTemplate) {
-            const htmlIn = resolvePath(`${ src }/${ settings.htmlTemplate.template }`);
-            const htmlOut = resolvePath(`${ dist }/${ settings.htmlTemplate.page }`);
-            const options = {
-                template: htmlIn,
-                target: htmlOut,
-            };
-            plugins.push(htmlTemplatePlugin(options));
-        }
-
-        // styles
-        if (settings.styles) {
-            const options = {
-                ...settings.styles,
-            };
-            plugins.push(stylesPlugin(options));
-        }
-
-        // svelte
-        if (settings.svelte) {
-            let { cssFileBaseName = settings.name } = settings.svelte;
-            const options = {
-                ...defaultSvelteOptions,
-                dev: !isProduction,
-                preprocess: autoPreprocess(),
-                css(styles) {
-                    // TODO: can we somehow inject this as a <link rel=""> into a html template if wanted?
-                    styles.write(`${ settings.dist }/${ cssFileBaseName }.svelte.css`);
-                },
-            };
-            plugins.push(sveltePlugin(options));
-        }
-
-        // jsx/react
-        if (settings.jsx) {
-            const options = {
-                ...settings.jsx,
-                transforms: [ "jsx", ],
-            };
-            plugins.push(sucrasePlugin(options));
-        }
-
-        // ts
-        if (settings.ts) {
-            const options = {
-                ...settings.ts,
-                transforms: [ "typescript" ],
-            };
-            plugins.push(sucrasePlugin(options));
-        }
-
-        if (!isProduction) {
-            if (settings.devServer) {
-                if (settings.devServer.livereload) {
-                    plugins.push(liveReloadPlugin());
-                }
-
-                plugins.push(
-                    // serve according to settings
-                    servePlugin({
-                        port: settings.devServer.port,
-                        contentBase: serveDir,
-                        historyApiFallback: true,
-                    })
-                );
-            }
-        }
-
-        if (settings.globalMinify) {
-            plugins.push(terserPlugin());
-        }
-
-        const rollupConf = {
-            input: jsIn,
-            output: {
-                name,
-                file: jsOut,
-                sourcemap,
-                format: "iife",
-                assetFileNames: "[name][extname]",
-            },
-            watch: {
-                clearScreen: false,
-            },
-            plugins,
-        };
-
-        if (settings.jsx) {
-            // needed for react for some reason :/
-            rollupConf.context = "window";
-        }
-
-        return rollupConf;
-    };
-
-
+    this.settings = settings;
     return this;
 }
+
+
+Conf.prototype.data = function () {
+    return this.settings;
+};
+
+Conf.prototype.end = function () {
+    const { settings, } = this;
+    const { productionEnvProperty, isProduction, } = settings;
+
+    // js bundle
+    const jsIn = resolvePath(`${ settings.src }/${ settings.entry }`);
+    const jsOut = resolvePath(`${ settings.dist }/${ settings.name }.js`);
+
+    // devserver
+    let serveDir;
+    if (settings.devServer) {
+        serveDir = resolvePath(settings.dist);
+    }
+
+    /** build relevant plugin options and add them */
+
+    // what to dedupe?
+    const resolveDedupe = [];
+    if (settings.svelte) {
+        resolveDedupe.push("svelte");
+    }
+
+    // base plugins
+    const plugins = [
+        nodeResolvePlugin({
+            browser: true,
+            dedupe: resolveDedupe
+        }),
+        replacePlugin({
+            "process.env.NODE_ENV": JSON.stringify(env),
+            [`process.env.${ productionEnvProperty }`]: JSON.stringify(process.env[productionEnvProperty]),
+        }),
+        commonjsPlugin(),
+    ];
+
+    // html template
+    if (settings.htmlTemplate) {
+        const htmlIn = resolvePath(`${ settings.src }/${ settings.htmlTemplate.template }`);
+        const htmlOut = resolvePath(`${ settings.dist }/${ settings.htmlTemplate.page }`);
+        const options = {
+            template: htmlIn,
+            target: htmlOut,
+        };
+        plugins.push(htmlTemplatePlugin(options));
+    }
+
+    // styles
+    if (settings.styles) {
+        const options = {
+            ...settings.styles,
+        };
+        plugins.push(stylesPlugin(options));
+    }
+
+    // svelte
+    if (settings.svelte) {
+        let { cssFileBaseName = settings.name } = settings.svelte;
+        const options = {
+            ...defaultSvelteOptions,
+            dev: !isProduction,
+            preprocess: autoPreprocess(),
+            css(styles) {
+                // TODO: can we somehow inject this as a <link rel=""> into a html template if wanted?
+                styles.write(`${ settings.dist }/${ cssFileBaseName }.svelte.css`);
+            },
+        };
+        plugins.push(sveltePlugin(options));
+    }
+
+    // jsx/react
+    if (settings.jsx) {
+        const options = {
+            ...settings.jsx,
+            transforms: [ "jsx", ],
+        };
+        plugins.push(sucrasePlugin(options));
+    }
+
+    // ts
+    if (settings.ts) {
+        const options = {
+            ...settings.ts,
+            transforms: [ "typescript" ],
+        };
+        plugins.push(sucrasePlugin(options));
+    }
+
+    if (!isProduction) {
+        if (settings.devServer) {
+            if (settings.devServer.livereload) {
+                plugins.push(liveReloadPlugin());
+            }
+
+            plugins.push(
+                // serve according to settings
+                servePlugin({
+                    port: settings.devServer.port,
+                    contentBase: serveDir,
+                    historyApiFallback: true,
+                })
+            );
+        }
+    }
+
+    if (settings.globalMinify) {
+        plugins.push(terserPlugin());
+    }
+
+    const rollupConf = {
+        input: jsIn,
+        output: {
+            name: settings.name,
+            file: jsOut,
+            sourcemap: settings.sourcemap,
+            format: "iife",
+            assetFileNames: "[name][extname]",
+        },
+        watch: {
+            clearScreen: false,
+        },
+        plugins,
+    };
+
+    if (settings.jsx) {
+        // needed for react for some reason :/
+        rollupConf.context = "window";
+    }
+
+    return rollupConf;
+};
+
+
 
 
 module.exports = {

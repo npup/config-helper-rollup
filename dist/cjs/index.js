@@ -1,4 +1,4 @@
-const { chr } = require("../../src/index2.js");
+const { chr } = require("../../src/index.js");
 
 module.exports = {
     chr,

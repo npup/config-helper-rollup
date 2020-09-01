@@ -6,7 +6,7 @@ const c1 = chr("app", {
     htmlTemplate: true,
     styles: true,
 });
-console.log(c1.peek());
+console.log(c1.getSettings());
 
 export default [
     c1.get()

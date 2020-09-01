@@ -11,7 +11,7 @@ const c1 =  chr("app", {
     minify: true,
 });
 
-console.log(c1.peek());
+console.log(c1.getSettings());
 
 export default [
    c1.get(),

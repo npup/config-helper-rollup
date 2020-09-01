@@ -1,3 +1,3 @@
-const { chr: cjsChr } = require("../../src/index2.js");
+const { chr: cjsChr } = require("../../src/index.js");
 
 export const chr = cjsChr;

@@ -1,3 +1,5 @@
+const path = require("path");
+
 
 const mergeDefaults = (options, defaults) => {
     if ("boolean" == typeof options) { options = {}; }
@@ -10,7 +12,12 @@ const mergeDefaults = (options, defaults) => {
     return { ...defaults, ...filteredOptions };
 };
 
+const resolvePath = (_path, base = "./") => {
+    return path.resolve(base, _path);
+};
+
 
 module.exports = {
     mergeDefaults,
+    resolvePath,
 };

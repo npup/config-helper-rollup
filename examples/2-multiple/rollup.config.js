@@ -15,8 +15,8 @@ const c2 = chr("app2", {
 
 
 console.log({
-    c1: c1.peek(),
-    c2: c2.peek(),
+    c1: c1.getSettings(),
+    c2: c2.getSettings(),
 })
 export default [
     c1.get(),

@@ -52,6 +52,17 @@ svelte, jsx or TypeScript, supply a corresponding options object - or use the ch
         .htmlTemplate()
         .end();
 
+Helpful entries in npm's package.json scripts are:
+
+    // package.json, excerpt
+    ---- >8
+    "scripts": {
+        "clean": "rm -rf ./dist",
+        "build": "rollup -c",
+        "dev": "npm run build -- -w --environment NODE_ENV:development
+    }
+    8< ----
+
 
 ### Options
 

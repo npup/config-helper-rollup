@@ -35,7 +35,7 @@ Behold a simple sample project:
     echo 'console.log("bundled especially for you");' > src/main.js
     touch rollup.config.js
     
-In your `rollup.config.js` file, import `chr`, and export a configuration (or array of configurations):
+In your `rollup.config.js` file, import `chr`, and as usual with [Rollup](http://rollupjs.org): export a configuration (or array of configurations):
 
     import { chr } from "config-helper-rollup";
     
@@ -85,7 +85,7 @@ The signature of `chr` is
 
     chr: (appName: string, options: IOptions) => IIntermediateResult;
 
-The `appName` corresponds to a plain [Rollup](https://rollupjs.org) config's _name_ property, and thus should be a string that is also a valid JavaScript identifier.
+The `appName` parameter corresponds to a plain [Rollup](https://rollupjs.org) config's `output.name` property, and thus should be a string that is also a valid JavaScript identifier.
 
 The options signature is
 

@@ -83,6 +83,13 @@ The options signature is
     }
 
 ##### Base options
+
+| prop | description |
+|--------------------|
+| src | the source directory |
+|--------------------|
+
+
 * `src` - the source directory
 * `dist` - the build directory, to which all processed files are written
 * `entry` - the main entry filename (in the `src` directory)

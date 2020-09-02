@@ -2,7 +2,7 @@
 
 ## Description
 
-*Config Rollup Helper* is a helper function to create configurations for the bundler [Rollup](https://rollupjs.org).
+*Config Helper Rollup* is a helper function to create configurations for the bundler [Rollup](https://rollupjs.org).
 Submitting settings to this API creates readable, modifiable and working rollup configurations.
 
 The API helps with settings for

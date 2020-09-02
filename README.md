@@ -114,6 +114,13 @@ The options signature is
         sourceMap?: boolean;    // default: true
         minify?: boolean;       // default: deduced from the Base option "minify"
     }
+
+| prop | description |
+|------|-------------|
+| autoModules | Regexp to match style file names which should be treated ass css modules |
+| extract | whether to extract styles to a file ow its own |
+| sourceMap | whether to generate sourcemaps for styles |
+| minify | whether to minify the content in bundles written |
     
 Example:
     
@@ -137,6 +144,13 @@ Example:
         page?: string;      // default: "index.html"
     }
 
+| prop | description |
+|------|-------------|
+| template | template filename (in `src` directory) |
+| page | output html file name (in `dist`directory) |
+
+    
+
 Example:
 
     chr("myApp", {
@@ -158,6 +172,12 @@ Example:
         livereload?: boolean;   // default: true
     }
 
+| prop | description |
+|------|-------------|
+| port | port on which to start development server |
+| livereload | whether to use livereload |
+
+
 Example:
 
     chr("myApp", {
@@ -178,6 +198,12 @@ Example:
         cssFileBaseName?: string;   // default: deduced from the submitted base "appName" setting 
     }
 
+| prop | description |
+|------|-------------|
+| cssFileBasename | base name of generated css file. Will result in `<baseName>.svelte.css` (in `dist` directory) |
+
+
+
 Example:
 
     chr("myApp", {
@@ -196,6 +222,10 @@ Example:
 
     interface IJsxOptions {}
 
+| prop | description |
+|------|-------------|
+|      |             |
+
 Example 
 
     chr("myApp", {
@@ -209,6 +239,10 @@ Example
 ##### ts
 
     interface ITsOptions {}
+
+| prop | description |
+|------|-------------|
+|      |             |
     
 Example:
 

@@ -84,18 +84,14 @@ The options signature is
 
 ##### Base options
 
-| prop | description |
-|--------------------|
-| src | the source directory |
-|--------------------|
+| prop       | description          |
+|------------|----------------------|
+| src        | the source directory |
+| dist       | the build directory, to which all processed files are written |
+| entry      | the main entry filename (in the `src` directory) |
+| production | used to determine prod/dev mode. It is either a "hard boolean", or a string indicating which `node.env` property to look at. If that property is anything but `"development"`, mode is considered to be **production**. |
+| minify     | whether to minify written files. If not supplied, it will be deduced from whether mode is **production** (_true_) or not (_false_).  |
 
-
-* `src` - the source directory
-* `dist` - the build directory, to which all processed files are written
-* `entry` - the main entry filename (in the `src` directory)
-* `sourcemap` - whether to produce source maps when bundling
-* `production` - used to determine prod/dev mode. It is either a "hard boolean", or a string indicating which `node.env` property to look at. If that property is anything but `"development"`, mode is considered to be **production**.
-* `minify` - whether to minify written files. If not supplied, it will be deduced from whether mode is **production** (_true_) or not (_false_). 
 
 #### Plugin options
 

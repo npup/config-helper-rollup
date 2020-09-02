@@ -17,7 +17,7 @@ The API helps with settings for
 
 ## Contents
 
-_Table of Contents: Optionally, include a table of contents in order to allow other people to quickly navigate especially long or detailed READMEs._
+\-
 
 ## Installation
 

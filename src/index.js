@@ -147,7 +147,21 @@ Conf.prototype.end = function () {
         commonjsPlugin(),
     ];
 
-    // html template
+
+    // styles
+    if (settings.styles) {
+        const { sourcemap: sourceMap, minify: minimize, autoModules, extract: isExtractMode } = settings.styles;
+        const options = {
+            //...settings.styles,
+            autoModules,
+            sourceMap,
+            minimize,
+            mode: [ isExtractMode ? "extract" : "inject" ],
+        };
+        plugins.push(stylesPlugin(options));
+    }
+
+    // html template (push to plugins must come AFTER styles plugin)
     if (settings.htmlTemplate) {
         const htmlIn = resolvePath(`${ settings.src }/${ settings.htmlTemplate.template }`);
         const htmlOut = resolvePath(`${ settings.dist }/${ settings.htmlTemplate.page }`);
@@ -156,25 +170,6 @@ Conf.prototype.end = function () {
             target: htmlOut,
         };
         plugins.push(htmlTemplatePlugin(options));
-    }
-
-    // styles
-    if (settings.styles) {
-        /*
-            autoModules: /.+\.module\..+/,
-            extract: true,
-            sourceMap: true,
-            // minify: (will default to main prop "minify")
-         */
-        const { sourcemap: sourceMap, minify: minimize, autoModules, extract: isExtractMode } = settings.styles;
-        const options = {
-            //...settings.styles,
-            autoModules,
-            sourceMap,
-            minimize,
-            mode: isExtractMode ? "extract" : "inject",
-        };
-        plugins.push(stylesPlugin(options));
     }
 
     // svelte

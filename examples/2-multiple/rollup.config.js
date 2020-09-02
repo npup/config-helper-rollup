@@ -1,5 +1,6 @@
 import { chr } from "../../dist/esm/index";
 
+
 export default [
 
     chr("app", { entry: "app1.js", })
@@ -9,7 +10,7 @@ export default [
     chr("app2", { entry: "app2.js", })
         .htmlTemplate()
         .devServer()
-        .styles({ sourceMap: false, })
+        .styles({ sourcemap: false, })
         .end(),
 
 ];

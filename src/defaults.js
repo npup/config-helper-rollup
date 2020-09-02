@@ -22,7 +22,7 @@ const defaultOptions = {
 const defaultStylesOptions = {
     autoModules: /.+\.module\..+/,
     extract: true,
-    sourceMap: true,
+    sourcemap: true,
     // minify: (will default to main prop "minify")
 };
 

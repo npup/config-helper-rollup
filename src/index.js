@@ -45,12 +45,40 @@ function Conf(name, options = {}) {
     const addHandler = (prop, _defaults) => {
         return this[prop] = (options = true, defaults = _defaults) => {
             settings[prop] = mergeDefaults(options, defaults);
+            // extra massaging of props
+            switch (prop) {
+                case "styles": {
+                    if ("boolean" != typeof settings.styles.minify) {
+                        settings.styles.minify = settings.globalMinify;
+                    }
+                }
+                break;
+            }
             return this;
         };
     };
 
     // settings object
     const settings = { name, ...baseOptions, };
+
+    // is runtime "production" or not?
+    let { production: productionEnvProperty } = settings;
+    // first, look at the sent in "production" property (turn to boolean)
+    let isProduction = !!productionEnvProperty;
+    // if it was in fact a string, use it is as property to look for in process.env
+    // to determine if it is "development". If it is not - consider this "production mode".
+    if ("string" == typeof productionEnvProperty) {
+        isProduction = "development" != process.env[productionEnvProperty];
+    }
+
+    settings.productionEnvProperty = productionEnvProperty;
+    settings.isProduction = isProduction;
+
+    //  minify: use explicit setting or heed isProduction flag
+    if ("boolean" != typeof globalMinify) {
+        settings.globalMinify = isProduction;
+    }
+
 
     // create chaining utility functions for each wanted type of settings
     const handleDevServer = addHandler("devServer", defaultDevserverOptions);
@@ -73,23 +101,7 @@ function Conf(name, options = {}) {
         if (type) { handler(type, options); }
     });
 
-    // is runtime "production" or not?
-    let { production: productionEnvProperty } = settings;
-    // first, look at the sent in "production" property (turn to boolean)
-    let isProduction = !!productionEnvProperty;
-    // if it was in fact a string, use it is as property to look for in process.env
-    // to determine if it is "development". If it is not - consider this "production mode".
-    if ("string" == typeof productionEnvProperty) {
-        isProduction = "development" != process.env[productionEnvProperty];
-    }
 
-    //  minify: use explicit setting or heed isProduction flag
-    if ("boolean" != typeof globalMinify) {
-        settings.globalMinify = isProduction;
-    }
-
-    settings.productionEnvProperty = productionEnvProperty;
-    settings.isProduction = isProduction;
 
     this.settings = settings;
     return this;
@@ -148,8 +160,19 @@ Conf.prototype.end = function () {
 
     // styles
     if (settings.styles) {
+        /*
+            autoModules: /.+\.module\..+/,
+            extract: true,
+            sourceMap: true,
+            // minify: (will default to main prop "minify")
+         */
+        const { sourcemap: sourceMap, minify: minimize, autoModules, extract: isExtractMode } = settings.styles;
         const options = {
-            ...settings.styles,
+            //...settings.styles,
+            autoModules,
+            sourceMap,
+            minimize,
+            mode: isExtractMode ? "extract" : "inject",
         };
         plugins.push(stylesPlugin(options));
     }

@@ -35,7 +35,7 @@ Behold a simple sample one-file project:
     echo 'console.log("bundled especially for you");' > src/main.js
     touch rollup.config.js
     
-In your `rollup.config.js` file, import `chr`, and as usual with [Rollup](http://rollupjs.org): export a configuration (or array of configurations):
+In your `rollup.config.js` file, import `chr`, and as usual with [Rollup](http://rollupjs.org) - export a configuration (or array of configurations):
 
     import { chr } from "config-helper-rollup";
     

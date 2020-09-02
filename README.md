@@ -53,7 +53,7 @@ Run rollup and check the results:
 
 
 To make the resulting configuration include settings for anything like styles, templates,
-svelte, jsx or TypeScript, supply a corresponding options object - or use the chaining syntax:
+svelte, jsx or TypeScript - supply a corresponding options object (or use the chaining syntax):
 
     chr("myApp", {
         styles: true,

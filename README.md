@@ -10,6 +10,7 @@ Features settings for
 * minification and/or sourcemaps
 * dev server (including hot reload)
 * svelte components
+* react
 
 ## Manual basic svelte + rollup conf
 
@@ -61,15 +62,15 @@ And some more, of course if one wants a dev server and some hot reloading etc.
 
 ## Example
 
-Give the `name` property of a normal rollup config options object, and submit any extra options if wanted.
+Give the `name` property of a normal rollup config options object, possibly submit any extra options if wanted, and finish the configuration build.
 
-Config
+Basic config
 
     // rollup.config.js    
     import { chr } from "config-helper-rollup";
     
     export default [ // array of 1 or more configurations
-        chr("app") // voilà!
+        chr("app").end() // voilà!
     ];
 
 Npm scripts
@@ -84,19 +85,53 @@ Npm scripts
     }
     8< ----
 
+## Base options
 
-This uses the defaults, which creates a configuration that handles
+* src - default value: `"./src"` 
+    * src directory
+* dist - default value: `"./dist"`
+    * dist (build) directory
+* entry - default value: `"main.js"`
+    * entry source file name
+* sourcemap - default value: `true`
+    * whether to generate source maps for (relevant) processed files
+* minify - default value: `null`
+    * whether to generated files should be minified. A non-boolean value means that the calculated `production` mode decide (see option "production"). 
+* production - default value: `NODE_ENV`
+    * a hard boolean flag - **or** a string that says which `node.env` property to look at (if that property is not exactly equal to `"development"`, mode is considered to be *production*)
 
-* using a html template file `./src/index.html`.
-* using an entry file `./src/main.js`.
-* building to
-    * `./dist/index.html`
-    * `./dist/app.js`
-    * `./dist/app.css`
-* (plus sourcemaps)
-* serving the dist folder on port `3000`
-* rebuilding on changes
-* using hot reload
+
+## Additional options
+
+
+### htmlTemplate
+
+to activate settings for using an HTML template, invoke `htmlTemplate`:
+
+    const conf = chr("app")
+        .htmlTemplate(options: IHTMLTemplateOptions)
+        .end();
+
+##### IHTMLTemplateOptions
+false,        // use an html file template?
+
+                                              
+### devServer
+
+false,          // if a development server should be started for this build                
+
+###svelte
+
+false,              // process svelte files
+
+                                                    
+### jsx
+
+false,                 // process jsx files (presumably React)                                    
+
+### styles
+false,              // extract referenced styles and inject <link> elements in html template   
+
 
 Those things can all be changed. Here are all available options, and any defaults:
 
@@ -106,15 +141,18 @@ Those things can all be changed. Here are all available options, and any default
         dist:       "./dist",       // dist directory
         entry:      "main.js",      // main entry js file
         sourcemap:  true,           // yes, please
+        minify:   null,           // if not an explicit boolean, it will be the same as the "is production" flag (see options#production)
+        production: "NODE_ENV",     // a hard boolean flag - OR a string that says which node.env property to look at (if that property is not exactly equal to "development", mode is considered to be "production")
         
         htmlTemplate: false,        // use an html file template?
         devServer:  false,          // if a development server should be started for this build
         svelte: false,              // process svelte files
+        jsx: false,                 // process jsx files (presumably React)
         styles: false,              // extract referenced styles and inject <link> elements in html template
 
-        production: "NODE_ENV",     // a hard boolean flag - OR a string that says which node.env property to look at (if that property is not exactly equal to "development", mode is considered to be "production")
         
-        minify:   null,           // if not an explicit boolean, it will be the same as the "is production" flag (see options#production)
+        
+        
     }
     
     

@@ -38,6 +38,7 @@ Behold a simple sample project:
 In your `rollup.config.js` file, import `chr`, and export a configuration (or array of configurations):
 
     import { chr } from "config-helper-rollup";
+    
     export default [
         chr("myApp").end(),
     ];

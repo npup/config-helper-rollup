@@ -27,12 +27,9 @@ Install as a devDependency using npm:
 
 ## Usage
 
-In your `rollup.config.js` file, import `chr` like this:
+In your `rollup.config.js` file, import `chr`, and export a configuration (or array of configurations):
 
     import { chr } from "config-helper-rollup";
-
-Then, as usual in a rollup configuration file, export a configuration (or array of configurations as shown below):
-
     export default [
         chr("myApp").end(),
     ];

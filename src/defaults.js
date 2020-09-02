@@ -17,9 +17,16 @@ const defaultOptions = {
 };
 
 
-const defaultTsOptions = {
 
+
+const defaultStylesOptions = {
+    autoModules: /.+\.module\..+/,
+    extract: true,
+    sourceMap: true,
+    // minify: (will default to main prop "minify")
 };
+
+
 const defaultHtmlTemplateOptions = {
     template: "index.html",
     page: "index.html",
@@ -36,16 +43,11 @@ const defaultSvelteOptions = {
 };
 
 const defaultJsxOptions = {
-
 };
 
-
-const defaultStylesOptions = {
-    autoModules: /.+\.module\..+/,
-    extract: true,
-    sourceMap: true,
-    // minify: (will default to main prop "minify")
+const defaultTsOptions = {
 };
+
 
 
 module.exports = {

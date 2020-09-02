@@ -1,210 +1,214 @@
-# Rollup Helper - simple Rollup Configurations
+# Config Helper Rollup - simple Rollup Configurations
 
-One-stop function to create configurations for rollup - production or development builds.
+## Description
 
-Features settings for
+*Config Rollup Helper* is a helper function to create configurations for the bundler [Rollup](https://rollupjs.org).
+Submitting settings to this API creates readable, modifiable and working rollup configurations.
 
-* js
-* css (including scoped css) - can use sass/less etc (if npm-installed)
-* html templates
-* minification and/or sourcemaps
-* dev server (including hot reload)
-* svelte components
-* react
+The API helps with settings for
 
-## Manual basic svelte + rollup conf
-
-To create a basic `rollup.config.js` for svelte development, something like this is typically needed:
-
-    
-    // rollup.config.js
-    
-    import svelte from "rollup-plugin-svelte";
-    import resolve from "@rollup/plugin-node-resolve";
-    import commonjs from "@rollup/plugin-commonjs";
-
-    export default [ // array of 1 or more configurations
-        {
-            input: "./src/main.js",
-            output: {
-                name: "app",
-                format: "iife",
-                file: "./dist",
-            },
-            plugins: [
-                svelte({
-                    dev: "production" != process.env.NODE_ENV,
-                    css(styles) {
-                        styles.write("./dist/bundle.css);
-                    }
-                }),
-                resolve({
-                    browser: true,
-                    dedupe: [ "svelte" ],
-                }),
-                commonjs(),
-            ]
-        }
-    ]; 
-
-And some more, of course if one wants a dev server and some hot reloading etc.
-
-## Rollup Helper helps
-
-`chr` is a function than builds a configuration object for you. Its options can help you with all the things in the manual configuration above, and some more. Here is the menu:
-
-* selecting input files and names of output files
-* source maps
+* styles
 * minification
-* development server with options like
-    * port
-    * optional livereload
+* development server
+* html template
+* svelte
+* jsx (in effect, React)
+* TypeScript
 
-## Example
+## Contents
 
-Give the `name` property of a normal rollup config options object, possibly submit any extra options if wanted, and finish the configuration build.
+_Table of Contents: Optionally, include a table of contents in order to allow other people to quickly navigate especially long or detailed READMEs._
 
-Basic config
+## Installation
 
-    // rollup.config.js    
+Install as a devDependency using npm:
+
+    npm i config-helper-rollup -D
+
+## Usage
+
+In your `rollup.config.js` file, import `chr` like this:
+
     import { chr } from "config-helper-rollup";
-    
-    export default [ // array of 1 or more configurations
-        chr("app").end() // voilà!
+
+Then, as usual in a rollup configuration file, export a configuration (or array of configurations as shown below):
+
+    export default [
+        chr("myApp").end(),
     ];
 
-Npm scripts
+The above is calling the builder API, with all default options,
+and finally invoking `end()` to produce an actual rollup configuration object.
 
-    // package.json, excerpt
+To make the resulting configuration include settings for anything like styles, templates,
+svelte, jsx or TypeScript, supply a corresponding options object - or use the chaining syntax:
+
+    chr("myApp", {
+        styles: true,
+        htmlTemplate: true,
+    }).end();
     
-    ---- >8
-    "scripts": {
-        "clean": "rm -rf ./dist",
-        "build": "rollup -c",
-        "dev": "npm run build -- -w --environment NODE_ENV:development
-    }
-    8< ----
-
-## Base options
-
-* src - default value: `"./src"` 
-    * src directory
-* dist - default value: `"./dist"`
-    * dist (build) directory
-* entry - default value: `"main.js"`
-    * entry source file name
-* sourcemap - default value: `true`
-    * whether to generate source maps for (relevant) processed files
-* minify - default value: `null`
-    * whether to generated files should be minified. A non-boolean value means that the calculated `production` mode decide (see option "production"). 
-* production - default value: `NODE_ENV`
-    * a hard boolean flag - **or** a string that says which `node.env` property to look at (if that property is not exactly equal to `"development"`, mode is considered to be *production*)
-
-
-## Additional options
-
-
-### htmlTemplate
-
-to activate settings for using an HTML template, invoke `htmlTemplate`:
-
-    const conf = chr("app")
-        .htmlTemplate(options: IHTMLTemplateOptions)
+    // or
+    
+    chr("myApp")
+        .styles()
+        .htmlTemplate()
         .end();
 
-##### IHTMLTemplateOptions
-false,        // use an html file template?
 
-                                              
-### devServer
+### Options
 
-false,          // if a development server should be started for this build                
+The signature of `chr` is
 
-###svelte
+    chr: (appName: string, options: IOptions) => IIntermediateResult;
 
-false,              // process svelte files
+The `appName` corresponds to a plain [Rollup](https://rollupjs.org) config's _name_ property, and thus should be a string that is also a valid JavaScript identifier.
 
-                                                    
-### jsx
+The options signature is
 
-false,                 // process jsx files (presumably React)                                    
-
-### styles
-false,              // extract referenced styles and inject <link> elements in html template   
-
-
-Those things can all be changed. Here are all available options, and any defaults:
-
-    {
+    interface IOptions {
+        // Base options
+        src?: string;                   // default "./src"
+        dist?: string;                  // default "./dist"
+        entry?: string;                 // default "main.js"
+        sourcemap?: boolean;            // default: true 
+        production?: boolean | string;  // default: "NODE_ENV"
+        minify?: boolean;               // default: true if production mode, false otherwise (see "production" option) 
         
-        src:        "./src",        // src directory
-        dist:       "./dist",       // dist directory
-        entry:      "main.js",      // main entry js file
-        sourcemap:  true,           // yes, please
-        minify:   null,           // if not an explicit boolean, it will be the same as the "is production" flag (see options#production)
-        production: "NODE_ENV",     // a hard boolean flag - OR a string that says which node.env property to look at (if that property is not exactly equal to "development", mode is considered to be "production")
-        
-        htmlTemplate: false,        // use an html file template?
-        devServer:  false,          // if a development server should be started for this build
-        svelte: false,              // process svelte files
-        jsx: false,                 // process jsx files (presumably React)
-        styles: false,              // extract referenced styles and inject <link> elements in html template
-
-        
-        
+        // Plugin options
+        styles?: boolean | IStylesOptions;              // default: false
+        htmlTemplate?: boolean | IHtmlTemplateOptions;  // default: false
+        devServer?: boolean | IDevServerOptions;        // default: false
+        svelte?: boolean | ISvelteOptions;              // default: false
+        jsx?: boolean | IJsxOptions;                    // default: false
+        ts?: boolean | ITsOptions;                      // default: false
         
     }
+
+##### Base options
+* `src` - the source directory
+* `dist` - the build directory, to which all processed files are written
+* `entry` - the main entry filename (in the `src` directory)
+* `sourcemap` - whether to produce source maps when bundling
+* `production` - used to determine prod/dev mode. It is either a "hard boolean", or a string indicating which `node.env` property to look at. If that property is anything but `"development"`, mode is considered to be **production**.
+* `minify` - whether to minify written files. If not supplied, it will be deduced from whether mode is **production** (_true_) or not (_false_). 
+
+#### Plugin options
+
+##### styles
+
+    interface IStyleOptions {
+        autoModules?: RegExp;   // default: /.+\.module\..+/
+        extract?: boolean;      // default: true
+        sourceMap?: boolean;    // default: true
+        minify?: boolean;       // default: deduced from the Base option "minify"
+    }
     
+Example:
     
-## Options
-
-### src
-The src directory. Defaults to `./src`.
-
-### dist  
-The output directory. Defaults to `./dist`. 
-
-### entry
-The main entry js file. Defaults to `main.js`.
-
-### sourcemap
-If sourcemaps should be generated (js, css). Defauls to `true`.
-
-### htmlTemplate
-If an html template should be processed. Defaults to `false`.
-
-Possible values: `true`, `false`, `<HtmlTemplateOptions>`.
-
-##### HtmlTemplateOptions:
-   
-`template` - src template. Defaults to `index.html`.  
-`page` - output file name (in output directory). Defaults to `index.html`.
+    chr("myApp", {
+        styles: {
+            minify: false,
+        }    
+    });
     
+    // or, using the chaining style API:
+    chr("myApp")
+        .styles({
+            minify: false,
+        });
 
- 
 
+##### htmlTemplate
 
+    interface IHtmlTemplateOptions {
+        template?: string;  // default: "index.html"
+        page?: string;      // default: "index.html"
+    }
 
-Call it multiple times if you want, of course:
+Example:
 
-
-    // rollup.config.js
+    chr("myApp", {
+        htmlTemplate: {
+            template: "index.v2.html",
+        }
+    });
     
-    import { chr } from "config-helper-rollup";
+    // or, using the chaining style API:
+    chr("myApp")
+        .htmlTemplate({
+            template: "index.v2.html",
+        });
+
+##### devServer
+
+    interface IDevServerOptions {
+        port?: number;          // default: 3000
+        livereload?: boolean;   // default: true
+    }
+
+Example:
+
+    chr("myApp", {
+        devServer: {
+            port: 8001,
+        }
+    });
     
-    export default = [
-        chr("app"),
-        chr("app2", {
-            htmlTemplate: true,
-            entry: "second.js",
-        }),
-    ];
+    // or, using the chaining style API:
+    chr("myApp")
+        .devServer({
+            port: 8001,
+        });
 
+##### svelte
 
-.. where the second configuration
+    interface ISvelteOptions {
+        cssFileBaseName?: string;   // default: deduced from the submitted base "appName" setting 
+    }
 
-1) points conf to a secondary set of files and outputs 
-2) avoids starting a second server
+Example:
 
-The result is two single page apps, served by the same dev server (hot reloading etc. still).
+    chr("myApp", {
+        svelte: {
+            cssFileBaseName: "styles",
+        }
+    });
+    
+    // or, using the chaining style API:
+    chr("myApp")
+        .svelte({
+            cssFileBaseName: "styles",
+        }) 
 
+##### jsx
+
+    interface IJsxOptions {}
+
+Example 
+
+    chr("myApp", {
+        jsx: true,
+    });
+    
+    // or, using the chaining style API:
+    chr("myApp")
+        .jsx();
+
+##### ts
+
+    interface ITsOptions {}
+    
+Example:
+
+    chr("myApp", {
+        ts: true,
+    });
+    
+    // or, using the chaining style API:
+    chr("myApp")
+        .ts();
+
+## License
+
+License: Finally, include a section for the license of your project. For more information on choosing a license, check out GitHub’s licensing guide!

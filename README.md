@@ -27,7 +27,7 @@ Install as a devDependency using npm:
 
 ## Usage
 
-Behold a simple sample project:
+Behold a simple sample one-file project:
 
     mkdir -p my-app/src && cd my-app
     npm init --yes

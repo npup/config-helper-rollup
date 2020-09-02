@@ -27,6 +27,14 @@ Install as a devDependency using npm:
 
 ## Usage
 
+Behold a simple sample project:
+
+    mkdir -p my-app/src && cd my-app
+    npm init --yes
+    npm i -D rollup config-helper-rollup
+    echo 'console.log("bundled especially for you");' > src/main.js
+    touch rollup.config.js
+    
 In your `rollup.config.js` file, import `chr`, and export a configuration (or array of configurations):
 
     import { chr } from "config-helper-rollup";
@@ -36,6 +44,12 @@ In your `rollup.config.js` file, import `chr`, and export a configuration (or ar
 
 The above is calling the builder API, with all default options,
 and finally invoking `end()` to produce an actual rollup configuration object.
+
+Run rollup and check the results:
+
+    npx rollup -c
+    node dist/myApp.js
+
 
 To make the resulting configuration include settings for anything like styles, templates,
 svelte, jsx or TypeScript, supply a corresponding options object - or use the chaining syntax:

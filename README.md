@@ -70,7 +70,7 @@ The signature of `chr` is
 
     chr: (appName: string, options: IOptions) => IIntermediateResult;
 
-The `appName` corresponds to a plain [Rollup](https://rollupjs.org) config's _name_ property, and thus should be a string that is also a valid JavaScript identifier.
+The `appName` corresponds to a plain [Rollup](https://rollupjs.org) config's `output.name` property, and thus should be a string that is also a valid JavaScript identifier.
 
 The options signature is
 

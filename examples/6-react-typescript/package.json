@@ -1,0 +1,23 @@
+{
+  "name": "6-react-typescript",
+  "version": "1.0.0",
+  "description": "",
+  "main": "rollup.config.js",
+  "scripts": {
+    "build": "npm run clean && npx rollup -c ./rollup.config.js",
+    "clean": "rm -rf ./dist",
+    "dev": "npm run build -- -w --environment NODE_ENV:development"
+  },
+  "keywords": [],
+  "author": "P.Envall <petter.envall@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "typescript": "^4.0.2"
+  },
+  "devDependencies": {
+    "@types/react": "^16.9.49",
+    "@types/react-dom": "^16.9.8"
+  }
+}

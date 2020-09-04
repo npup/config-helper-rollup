@@ -187,20 +187,23 @@ Conf.prototype.end = function () {
         plugins.push(sveltePlugin(options));
     }
 
+    const sucraseTransforms = [];
     // jsx/react
     if (settings.jsx) {
+        sucraseTransforms.push("jsx");
         const options = {
             ...settings.jsx,
-            transforms: [ "jsx", ],
+            transforms: sucraseTransforms,
         };
         plugins.push(sucrasePlugin(options));
     }
 
     // ts
     if (settings.ts) {
+        sucraseTransforms.push("typescript");
         const options = {
             ...settings.ts,
-            transforms: [ "typescript" ],
+            transforms: sucraseTransforms,
         };
         plugins.push(sucrasePlugin(options));
     }

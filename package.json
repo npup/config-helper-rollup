@@ -1,6 +1,6 @@
 {
   "name": "config-helper-rollup",
-  "version": "0.0.34-alpha",
+  "version": "0.0.35-alpha",
   "description": "Quite a bit under construction. Beware - no guarantees, no semver (or even proper versioning) (yet)",
   "main": "/",
   "exports": {
@@ -32,13 +32,13 @@
     "svelte-preprocess": "^4.1.1"
   },
   "devDependencies": {
+    "@rollup/plugin-json": "^4.1.0",
     "tap-spec": "^5.0.0",
     "tape": "^5.0.1"
   },
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/npup/config-helper-rollup"
+    "type": "git",
+    "url": "https://github.com/npup/config-helper-rollup"
   },
   "homepage": "https://github.com/npup/config-helper-rollup#readme"
-
 }

@@ -2,6 +2,7 @@ const sveltePlugin = require("rollup-plugin-svelte");
 const sucrasePlugin = require("@rollup/plugin-sucrase");
 const { nodeResolve: nodeResolvePlugin } = require("@rollup/plugin-node-resolve");
 const commonjsPlugin = require("@rollup/plugin-commonjs");
+const jsonPlugin = require("@rollup/plugin-json");
 const servePlugin = require("rollup-plugin-serve");
 const htmlTemplatePlugin = require("rollup-plugin-generate-html-template");
 const liveReloadPlugin = require("rollup-plugin-livereload");
@@ -145,6 +146,7 @@ Conf.prototype.end = function () {
             [`process.env.${ productionEnvProperty }`]: JSON.stringify(process.env[productionEnvProperty]),
         }),
         commonjsPlugin(),
+        jsonPlugin(),
     ];
 
 

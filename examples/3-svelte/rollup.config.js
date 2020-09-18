@@ -4,7 +4,7 @@ export default [
     chr("app")
         .svelte()
         .devServer()
-        .htmlTemplate()
+        .html()
         .styles()
         .end(),
 ];

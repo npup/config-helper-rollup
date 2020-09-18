@@ -27,11 +27,12 @@ const defaultStylesOptions = {
 };
 
 
-const defaultHtmlTemplateOptions = {
+const defaultHtmlOptions = {
     template: "index.html",
-    page: "index.html",
+    fileName: null, // will default to whatever `template` is
+    publicPath: "",
+    meta: [ { charset: "UTF-8", }, ],
 };
-
 
 const defaultDevserverOptions = {
     port: 3000,
@@ -52,10 +53,10 @@ const defaultTsOptions = {
 
 module.exports = {
     defaultOptions,
-    defaultHtmlTemplateOptions,
     defaultDevserverOptions,
     defaultSvelteOptions,
     defaultJsxOptions,
     defaultStylesOptions,
     defaultTsOptions,
+    defaultHtmlOptions,
 };

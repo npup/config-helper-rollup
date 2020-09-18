@@ -8,7 +8,7 @@ export default [
         .end(),
 
     chr("app2", { entry: "app2.js", })
-        .htmlTemplate()
+        .html()
         .devServer()
         .styles({ sourcemap: false, })
         .end(),

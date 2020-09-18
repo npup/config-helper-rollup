@@ -1,25 +1,26 @@
+const fs = require("fs");
 const sveltePlugin = require("rollup-plugin-svelte");
 const sucrasePlugin = require("@rollup/plugin-sucrase");
 const { nodeResolve: nodeResolvePlugin } = require("@rollup/plugin-node-resolve");
 const commonjsPlugin = require("@rollup/plugin-commonjs");
 const jsonPlugin = require("@rollup/plugin-json");
 const servePlugin = require("rollup-plugin-serve");
-const htmlTemplatePlugin = require("rollup-plugin-generate-html-template");
 const liveReloadPlugin = require("rollup-plugin-livereload");
 const { terser: terserPlugin } = require("rollup-plugin-terser");
 const stylesPlugin = require("rollup-plugin-styles");
 const replacePlugin = require("@rollup/plugin-replace");
 const autoPreprocess = require("svelte-preprocess");
+const htmlPlugin = require("@rollup/plugin-html");
 
 const { mergeDefaults, resolvePath } = require("./util");
 const {
     defaultOptions,
     defaultDevserverOptions,
-    defaultHtmlTemplateOptions,
     defaultStylesOptions,
     defaultSvelteOptions,
     defaultJsxOptions,
     defaultTsOptions,
+    defaultHtmlOptions,
 } = require("./defaults");
 
 
@@ -36,7 +37,7 @@ function Conf(name, options = {}) {
         // base options
         src, dist, entry, sourcemap, minify: globalMinify, production,
         // plugin options
-        devServer, htmlTemplate, styles, svelte, jsx, ts,
+        devServer, styles, svelte, jsx, ts, html,
     } = { ...defaultOptions, ...options };
 
     // base options
@@ -83,20 +84,20 @@ function Conf(name, options = {}) {
 
     // create chaining utility functions for each wanted type of settings
     const handleDevServer = addHandler("devServer", defaultDevserverOptions);
-    const handleHtmlTemplate = addHandler("htmlTemplate", defaultHtmlTemplateOptions);
     const handleStyles = addHandler("styles", defaultStylesOptions);
     const handleSvelte = addHandler("svelte", defaultSvelteOptions);
     const handleJsx = addHandler("jsx", defaultJsxOptions);
     const handleTs = addHandler("ts", defaultTsOptions);
+    const handleHtml = addHandler("html", defaultHtmlOptions);
 
     // invoke options handler functions directly for any settings submitted upfront
     [
         [ "devServer", devServer, handleDevServer, defaultDevserverOptions, ],
-        [ "htmlTemplate", htmlTemplate, handleHtmlTemplate, defaultHtmlTemplateOptions, ],
         [ "styles", styles, handleStyles, defaultStylesOptions, ],
         [ "svelte", svelte, handleSvelte, defaultSvelteOptions, ],
         [ "jsx", jsx, handleJsx, defaultJsxOptions, ],
         [ "ts", ts, handleTs, defaultTsOptions, ],
+        [ "html", html, handleHtml, defaultHtmlOptions, ],
     ].forEach(([ name, type, handler, options ]) => {
         if (0) { console.log(`Using module: ${ name }: ${ !!type }`, { name, type: String(type), handler, options }); }
         if (type) { handler(type, options); }
@@ -163,15 +164,42 @@ Conf.prototype.end = function () {
         plugins.push(stylesPlugin(options));
     }
 
-    // html template (push to plugins must come AFTER styles plugin)
-    if (settings.htmlTemplate) {
-        const htmlIn = resolvePath(`${ settings.src }/${ settings.htmlTemplate.template }`);
-        const htmlOut = resolvePath(`${ settings.dist }/${ settings.htmlTemplate.page }`);
-        const options = {
-            template: htmlIn,
-            target: htmlOut,
-        };
-        plugins.push(htmlTemplatePlugin(options));
+    // html template (this push to plugins must come AFTER styles plugin I think)
+    if (settings.html) {
+        const { fileName, publicPath: _publicPath, meta, template: templateFileName } = settings.html;
+        const outputFileName = fileName || templateFileName;
+        const htmlInPath = resolvePath(`${ settings.src }/${ templateFileName }`);
+        const htmlTemplateString = fs.readFileSync(htmlInPath, "utf-8");
+        plugins.push(htmlPlugin({
+            fileName: outputFileName,
+            publicPath: _publicPath,
+            meta,
+            template: props => {
+                return replacer(htmlTemplateString, props);
+            }
+        }));
+
+        function replacer(html, props) {
+            const { makeHtmlAttributes } = htmlPlugin;
+            const {
+                attributes: {
+                    html: htmlAttributes,
+                    link: linkAttributes,
+                    script: scriptAttributes,
+                },
+                files: {
+                    js: jsFiles,
+                    css: cssFiles,
+                },
+                meta, publicPath,
+            } = props;
+            let result = html
+                .replace(/%ATTRIBUTES_HTML%/, makeHtmlAttributes(htmlAttributes))
+                .replace(/%SCRIPTS%/, jsFiles.map(({ fileName }) => `<script src="${ publicPath }${ fileName }"></script>`).join("\n"))
+                .replace(/%LINKS%/, cssFiles.map(({ name }) => `<link rel="stylesheet" href="${ publicPath }${ name }" />`).join("\n"))
+                .replace(/%META%/, meta.map(item => `<meta ${ makeHtmlAttributes(item) } />`).join("\n"));
+            return result;
+        }
     }
 
     // svelte

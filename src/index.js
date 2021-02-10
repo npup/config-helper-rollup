@@ -54,7 +54,7 @@ function Conf(name, options = {}) {
                         settings.styles.minify = settings.globalMinify;
                     }
                 }
-                break;
+                    break;
             }
             return this;
         };
@@ -92,14 +92,14 @@ function Conf(name, options = {}) {
 
     // invoke options handler functions directly for any settings submitted upfront
     [
-        [ "devServer", devServer, handleDevServer, defaultDevserverOptions, ],
-        [ "styles", styles, handleStyles, defaultStylesOptions, ],
-        [ "svelte", svelte, handleSvelte, defaultSvelteOptions, ],
-        [ "jsx", jsx, handleJsx, defaultJsxOptions, ],
-        [ "ts", ts, handleTs, defaultTsOptions, ],
-        [ "html", html, handleHtml, defaultHtmlOptions, ],
-    ].forEach(([ name, type, handler, options ]) => {
-        if (0) { console.log(`Using module: ${ name }: ${ !!type }`, { name, type: String(type), handler, options }); }
+        ["devServer", devServer, handleDevServer, defaultDevserverOptions,],
+        ["styles", styles, handleStyles, defaultStylesOptions,],
+        ["svelte", svelte, handleSvelte, defaultSvelteOptions,],
+        ["jsx", jsx, handleJsx, defaultJsxOptions,],
+        ["ts", ts, handleTs, defaultTsOptions,],
+        ["html", html, handleHtml, defaultHtmlOptions,],
+    ].forEach(([name, type, handler, options]) => {
+        if (0) { console.log(`Using module: ${name}: ${!!type}`, { name, type: String(type), handler, options }); }
         if (type) { handler(type, options); }
     });
 
@@ -119,8 +119,8 @@ Conf.prototype.end = function () {
     const { productionEnvProperty, isProduction, } = settings;
 
     // js bundle
-    const jsIn = resolvePath(`${ settings.src }/${ settings.entry }`);
-    const jsOut = resolvePath(`${ settings.dist }/${ settings.name }.js`);
+    const jsIn = resolvePath(`${settings.src}/${settings.entry}`);
+    const jsOut = resolvePath(`${settings.dist}/${settings.name}.js`);
 
     // devserver
     let serveDir;
@@ -144,7 +144,7 @@ Conf.prototype.end = function () {
         }),
         replacePlugin({
             "process.env.NODE_ENV": JSON.stringify(env),
-            [`process.env.${ productionEnvProperty }`]: JSON.stringify(process.env[productionEnvProperty]),
+            [`process.env.${productionEnvProperty}`]: JSON.stringify(process.env[productionEnvProperty]),
         }),
         commonjsPlugin(),
         jsonPlugin(),
@@ -159,7 +159,7 @@ Conf.prototype.end = function () {
             autoModules,
             sourceMap,
             minimize,
-            mode: [ isExtractMode ? "extract" : "inject" ],
+            mode: [isExtractMode ? "extract" : "inject"],
         };
         plugins.push(stylesPlugin(options));
     }
@@ -168,7 +168,7 @@ Conf.prototype.end = function () {
     if (settings.html) {
         const { fileName, publicPath: _publicPath, meta, template: templateFileName } = settings.html;
         const outputFileName = fileName || templateFileName;
-        const htmlInPath = resolvePath(`${ settings.src }/${ templateFileName }`);
+        const htmlInPath = resolvePath(`${settings.src}/${templateFileName}`);
         const htmlTemplateString = fs.readFileSync(htmlInPath, "utf-8");
         plugins.push(htmlPlugin({
             fileName: outputFileName,
@@ -195,9 +195,9 @@ Conf.prototype.end = function () {
             } = props;
             let result = html
                 .replace(/%ATTRIBUTES_HTML%/, makeHtmlAttributes(htmlAttributes))
-                .replace(/%SCRIPTS%/, jsFiles.map(({ fileName }) => `<script src="${ publicPath }${ fileName }"></script>`).join("\n"))
-                .replace(/%LINKS%/, cssFiles.map(({ name }) => `<link rel="stylesheet" href="${ publicPath }${ name }" />`).join("\n"))
-                .replace(/%META%/, meta.map(item => `<meta ${ makeHtmlAttributes(item) } />`).join("\n"));
+                .replace(/%SCRIPTS%/, jsFiles.map(({ fileName }) => `<script src="${publicPath}${fileName}"></script>`).join("\n"))
+                .replace(/%LINKS%/, cssFiles.map(({ name }) => `<link rel="stylesheet" href="${publicPath}${name}" />`).join("\n"))
+                .replace(/%META%/, meta.map(item => `<meta ${makeHtmlAttributes(item)} />`).join("\n"));
             return result;
         }
     }
@@ -211,7 +211,7 @@ Conf.prototype.end = function () {
             preprocess: autoPreprocess(),
             css(styles) {
                 // TODO: can we somehow inject this as a <link rel=""> into a html template if wanted?
-                styles.write(`${ settings.dist }/${ cssFileBaseName }.svelte.css`);
+                styles.write(`${cssFileBaseName}.svelte.css`);
             },
         };
         plugins.push(sveltePlugin(options));
@@ -221,7 +221,7 @@ Conf.prototype.end = function () {
     if (settings.jsx) {
         const options = {
             ...settings.jsx,
-            transforms: [ "jsx", ],
+            transforms: ["jsx",],
         };
         plugins.push(sucrasePlugin(options));
     }
@@ -230,7 +230,7 @@ Conf.prototype.end = function () {
     if (settings.ts) {
         const options = {
             ...settings.ts,
-            transforms: [ "typescript" ],
+            transforms: ["typescript"],
         };
         plugins.push(sucrasePlugin(options));
     }
